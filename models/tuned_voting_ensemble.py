@@ -1,0 +1,45 @@
+import numpy as np
+from sklearn.ensemble import VotingClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+import lightgbm as lgb
+import xgboost as xgb
+import joblib
+import os
+# Load balanced data
+X = np.load("outputs/X_balanced.npy")
+y = np.load("outputs/y_balanced.npy")
+
+print("Loaded balanced data:")
+print("X shape:", X.shape)
+print("y shape:", y.shape)
+
+# Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Define tuned base models
+lgb_model = lgb.LGBMClassifier(learning_rate=0.1, max_depth=5, n_estimators=100)
+xgb_model = xgb.XGBClassifier(objective="multi:softmax", num_class=3, eval_metric='mlogloss',
+                              learning_rate=0.1, max_depth=5, n_estimators=100, use_label_encoder=False)
+
+# Voting ensemble
+ensemble = VotingClassifier(estimators=[
+    ('lgb', lgb_model),
+    ('xgb', xgb_model)
+], voting='hard')
+
+# Train
+print("\nTraining Voting Ensemble...")
+ensemble.fit(X_train, y_train)
+
+# Predict & Evaluate
+y_pred = ensemble.predict(X_test)
+print("\nClassification Report for Voting Ensemble (Tuned):\n")
+print(classification_report(y_test, y_pred))
+
+# Save
+np.save("outputs/voting_preds.npy", y_pred)
+np.save("outputs/y_test.npy", y_test)
+
+# After voting_clf.fit(...)
+joblib.dump(ensemble, "model_weights_fluency/voting_model.pkl")
