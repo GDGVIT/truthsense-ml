@@ -1,2 +1,6 @@
 .env.local
 venv/
+test.ipynb
+data/
+outputs/
+tim-urban.wav
