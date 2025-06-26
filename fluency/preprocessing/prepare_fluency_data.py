@@ -2,6 +2,8 @@ import os
 import numpy as np
 import librosa
 from tqdm import tqdm
+import parselmouth
+from parselmouth.praat import call
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -14,14 +16,11 @@ def extract_features(file_path):
         # ZCR
         zcr = np.mean(librosa.feature.zero_crossing_rate(y))
 
-        # Pitch (YIN may return nan)
-        try:
-            pitch = librosa.yin(y, fmin=librosa.note_to_hz("C2"), fmax=librosa.note_to_hz("C7"), sr=sr)
-            pitch_mean = np.nanmean(pitch)
-            pitch_std = np.nanstd(pitch)
-        except:
-            pitch_mean = 0.0
-            pitch_std = 0.0
+        sound = parselmouth.Sound(values=y, sampling_frequency=sr)
+        
+        pitch_values = sound.to_pitch().selected_array['frequency']
+        pitch_mean = np.nanmean(pitch_values)
+        pitch_std = np.nanstd(pitch_values)
 
         # RMS Energy
         rms = librosa.feature.rms(y=y)[0]
@@ -71,5 +70,5 @@ if __name__ == "__main__":
     X, y = load_dataset("fluency/data/")
     print(f"Final shape of X: {X.shape}, y: {y.shape}")
     os.makedirs('fluency/outputs', exist_ok=True)
-    np.save("fluency/fluency/outputs/X.npy", X)
-    np.save("fluency/fluency/outputs/y.npy", y)
+    np.save("fluency/outputs/X.npy", X)
+    np.save("fluency/outputs/y.npy", y)
