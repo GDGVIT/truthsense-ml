@@ -9,8 +9,9 @@ import joblib
 import os
 
 # Load data
-X = np.load("outputs/X_balanced.npy")
-y = np.load("outputs/y_balanced.npy")
+# Will need to change path according to where you run the file from
+X = np.load("./fluency/outputs/X.npy")
+y = np.load("./fluency/outputs/y.npy")
 
 print("Loaded balanced data:")
 print("X shape:", X.shape)
@@ -53,5 +54,5 @@ print("\nClassification Report for Stacking Ensemble (Tuned):\n")
 print(classification_report(y_test, y_pred))
 
 # Save predictions and model
-np.save("outputs/stacking_preds.npy", y_pred)
-joblib.dump(stacking_clf, "model_weights_fluency/stacking_model.pkl")
+np.save("./fluency/outputs/stacking_preds.npy", y_pred)
+joblib.dump(stacking_clf, "weights/stacking_model.pkl")

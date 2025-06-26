@@ -4,10 +4,13 @@ from sklearn.metrics import classification_report
 from lightgbm import LGBMClassifier
 import joblib
 import os
-os.makedirs("model_weights_fluency", exist_ok=True)
+
+os.makedirs("weights", exist_ok=True)
+
 # Load balanced dataset
-X = np.load("outputs/X_balanced.npy")
-y = np.load("outputs/y_balanced.npy")
+# Will need to change path according to where you run the file from
+X = np.load("./fluency/outputs/X.npy")
+y = np.load("./fluency/outputs/y.npy")
 
 # Split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -21,7 +24,7 @@ params = {
 }
 
 # Grid Search
-grid = GridSearchCV(LGBMClassifier(), params, cv=5, scoring='f1_weighted', verbose=1, n_jobs=-1)
+grid = GridSearchCV(LGBMClassifier(), params, cv=5, scoring='f1_weighted', verbose=0, n_jobs=-1)
 grid.fit(X_train, y_train)
 
 # Evaluate
@@ -31,5 +34,5 @@ print("\nClassification Report for Tuned LightGBM:\n")
 print(classification_report(y_test, y_pred))
 
 # After model.fit(...)
-joblib.dump(grid, "model_weights_fluency/lightgbm_model.pkl")
+joblib.dump(grid, "weights/lightgbm_model.pkl")
 print("Model saved.")

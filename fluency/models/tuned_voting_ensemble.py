@@ -6,9 +6,11 @@ import lightgbm as lgb
 import xgboost as xgb
 import joblib
 import os
+
 # Load balanced data
-X = np.load("outputs/X_balanced.npy")
-y = np.load("outputs/y_balanced.npy")
+# Will need to change path according to where you run the file from
+X = np.load("./fluency/outputs/X.npy")
+y = np.load("./fluency/outputs/y.npy")
 
 print("Loaded balanced data:")
 print("X shape:", X.shape)
@@ -38,8 +40,8 @@ print("\nClassification Report for Voting Ensemble (Tuned):\n")
 print(classification_report(y_test, y_pred))
 
 # Save
-np.save("outputs/voting_preds.npy", y_pred)
-np.save("outputs/y_test.npy", y_test)
+np.save("fluency/outputs/voting_preds.npy", y_pred)
+np.save("fluency/outputs/y_test.npy", y_test)
 
 # After voting_clf.fit(...)
-joblib.dump(ensemble, "model_weights_fluency/voting_model.pkl")
+joblib.dump(ensemble, "weights/voting_model.pkl")

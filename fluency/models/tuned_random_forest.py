@@ -9,8 +9,9 @@ import os
 # ================================
 # Load full original data
 # ================================
-X = np.load("outputs/X_balanced.npy")
-y = np.load("outputs/y_balanced.npy")
+# Will need to change path according to where you run the file from
+X = np.load("./fluency/outputs/X.npy")
+y = np.load("./fluency/outputs/y.npy")
 
 # ================================
 # Set up K-Fold strategy
@@ -60,6 +61,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_meta, y_meta, test_size=0.
 # ================================
 # Train meta-model (Random Forest)
 # ================================
+print(X_train)
 print("\nTraining Meta Random Forest...")
 meta_model = RandomForestClassifier(n_estimators=100, random_state=42)
 meta_model.fit(X_train, y_train)
@@ -74,5 +76,5 @@ print(classification_report(y_test, y_pred))
 # ================================
 # Save model
 # ================================
-os.makedirs("model_weights_fluency", exist_ok=True)
-joblib.dump(meta_model, "model_weights_fluency/random_forest_model.pkl")
+os.makedirs("weights", exist_ok=True)
+joblib.dump(meta_model, "weights/random_forest_model.pkl")

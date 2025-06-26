@@ -54,7 +54,7 @@ def load_dataset(dataset_path):
         label = labels[label_folder]
         print(f"Processing {label_folder}:")
         
-        files = [f for f in os.listdir(folder_path) if f.endswith('.wav')]
+        files = [f for f in os.listdir(folder_path)]
         for f in tqdm(files):
             full_path = os.path.join(folder_path, f)
             features = extract_features(full_path)
@@ -68,7 +68,8 @@ def load_dataset(dataset_path):
 
 
 if __name__ == "__main__":
-    X, y = load_dataset(".")
+    X, y = load_dataset("fluency/data/")
     print(f"Final shape of X: {X.shape}, y: {y.shape}")
-    np.save("X.npy", X)
-    np.save("y.npy", y)
+    os.makedirs('fluency/outputs', exist_ok=True)
+    np.save("fluency/fluency/outputs/X.npy", X)
+    np.save("fluency/fluency/outputs/y.npy", y)
