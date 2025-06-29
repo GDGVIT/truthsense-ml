@@ -1,5 +1,6 @@
 .env.local
 venv/
+.venv/
 test.ipynb
 data/
 outputs/
