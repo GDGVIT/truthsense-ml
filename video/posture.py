@@ -92,11 +92,10 @@ class BodyLanguageCorrector:
             v_eye = (eye_corner_lateral.x - eye_corner_medial.x, eye_corner_lateral.y - eye_corner_medial.y)
             # Vector from medial corner to the iris
             v_iris = (iris_point.x - eye_corner_medial.x, iris_point.y - eye_corner_medial.y)
-
             # Dot product to project iris vector onto the eye vector
             dot_product = (v_eye[0] * v_iris[0]) + (v_eye[1] * v_iris[1])
             # Squared magnitude of the eye vector
-            mag_sq_eye = (v_eye[0]**2) + (v_eye[1]**2)
+            mag_sq_eye = (v_iris[0]**2) + (v_iris[1]**2)
             
             if mag_sq_eye == 0:
                 return 0.5 # Avoid division by zero, return center
@@ -107,12 +106,14 @@ class BodyLanguageCorrector:
 
         # Standard landmark indices
         LEFT_EYE_POINTS = [landmarks[33], landmarks[133]]
-        RIGHT_EYE_POINTS = [landmarks[362], landmarks[263]]
+        RIGHT_EYE_POINTS = [landmarks[263], landmarks[362]]
         LEFT_IRIS_POINT = landmarks[473]
         RIGHT_IRIS_POINT = landmarks[468]
-
+                
         left_ratio = get_gaze_ratio(LEFT_EYE_POINTS, LEFT_IRIS_POINT)
         right_ratio = get_gaze_ratio(RIGHT_EYE_POINTS, RIGHT_IRIS_POINT)
+
+        print(left_ratio, right_ratio)
 
         # Heuristic: If the iris is in the middle ~40% of the eye's projected axis.
         EYE_CONTACT_THRESHOLD_MIN = 0.30
@@ -122,8 +123,8 @@ class BodyLanguageCorrector:
                              EYE_CONTACT_THRESHOLD_MIN < right_ratio < EYE_CONTACT_THRESHOLD_MAX)
 
         # Confidence score based on how close the ratios are to the center (0.5)
-        avg_ratio_distance_from_center = (abs(left_ratio - 0.5) + abs(right_ratio - 0.5)) / 2
-        eye_contact_score = max(0, 1 - avg_ratio_distance_from_center * 4) # Multiplier adjusted for better scoring
+        avg_ratio_distance_from_center = (abs(left_ratio - 0.5) + abs(right_ratio - 0.5))
+        eye_contact_score = max(0, 1 - avg_ratio_distance_from_center * 2) # Multiplier adjusted for better scoring
 
         # Update history and generate feedback
         self.eye_contact_history.append(looking_at_camera)
