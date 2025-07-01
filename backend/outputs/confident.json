@@ -1,0 +1,36 @@
+{
+  "fluency_coach": {
+    "comment": "The speaker's delivery was generally smooth, but there were moments where the pace felt slightly rushed, and filler words were used. The speech had a good flow overall, with no long pauses, indicating a decent level of comfort with the material. However, there's room for improvement in terms of pacing and reducing filler words for a more confident delivery.",
+    "fluency_score": 70
+  },
+  "language_coach": {
+    "strengths": [
+      "The speaker clearly introduced themselves and stated their intention.",
+      "The language used was simple and easy to understand.",
+      "The structure of the speech was straightforward and logical."
+    ],
+    "improvements": [
+      "There could be more variation in sentence structure to enhance engagement.",
+      "Adding more specific details about the model and its intended use could strengthen the content.",
+      "Practicing the speech could help reduce filler words and improve grammar accuracy."
+    ],
+    "structure_score": 80,
+    "grammar_score": 85
+  },
+  "speech_evaluator": {
+    "strengths": [
+      "The speaker's voice was clear, making it easy to understand what was being said.",
+      "There was a noticeable effort to articulate words, which helped with overall clarity.",
+      "The speaker showed potential for confident delivery, especially when discussing their goals."
+    ],
+    "improvements": [
+      "Working on vocal modulation could add more expressiveness to the speech.",
+      "Practicing in front of an audience could help build confidence and reduce signs of nervousness.",
+      "Focusing on maintaining a consistent pace could improve the delivery's overall impact."
+    ],
+    "clarity_score": 90,
+    "confidence_score": 60
+  },
+  "overall_score": 77,
+  "transcript": " Hi, my name is Adkarsh Malaya. I'm a student and right now what I'm trying to do is I'm trying to get a model and I'm trying to use it to transcribe some filler words. I am very scared. I don't know what will happen and I really really hope this works."
+}

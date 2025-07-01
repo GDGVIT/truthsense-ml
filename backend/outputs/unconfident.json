@@ -1,0 +1,36 @@
+{
+  "fluency_coach": {
+    "comment": "The speaker's delivery is marked by a noticeable increase in speaking pace as they progress, which may indicate growing comfort or nervousness. There are moments of hesitation and filler words, suggesting the speaker is still working on their fluency. The overall flow is somewhat affected by these factors, but the speaker manages to convey their message.",
+    "fluency_score": 60
+  },
+  "language_coach": {
+    "strengths": [
+      "The speaker clearly introduces themselves and states their purpose.",
+      "The language used is straightforward and easy to understand.",
+      "The speaker's message is concise and to the point."
+    ],
+    "improvements": [
+      "Consider organizing ideas into clearer, more defined segments for better flow.",
+      "Work on varying sentence structure to enhance engagement.",
+      "Practice using more precise vocabulary to convey confidence in the subject matter."
+    ],
+    "structure_score": 70,
+    "grammar_score": 80
+  },
+  "speech_evaluator": {
+    "strengths": [
+      "The speaker's tone is sincere and reflects their personal struggle with public speaking, which can be relatable.",
+      "There's an apparent effort to articulate thoughts clearly, despite some nervousness.",
+      "The speaker's goal of finding a model to recognize filler words shows self-awareness and a desire to improve."
+    ],
+    "improvements": [
+      "To improve clarity, focus on enunciating each word and pausing for emphasis where necessary.",
+      "Varying the pitch and volume can make the speech more engaging and expressive.",
+      "Building confidence through practice will help reduce signs of nervousness, such as filler words and hesitations."
+    ],
+    "clarity_score": 75,
+    "confidence_score": 50
+  },
+  "overall_score": 68,
+  "transcript": " My name is Utkarsh Malaya. I'm a very very scared student and I have a fear of public speaking so this is very difficult for me and yeah I'm just trying to get one model that can recognize these filler words."
+}
