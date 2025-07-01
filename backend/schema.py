@@ -34,6 +34,7 @@ class Feedback(BaseModel):
 class FrontendResponse(BaseModel):
     transcript: str
     overall_score: int
+    speaking_rate: int
     fluency_evaluator: FluencyEvaluator
     language_evaluator: ContentEvaluator
     speech_evaluator: SpeechEvaluator

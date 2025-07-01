@@ -33,6 +33,7 @@ async def get_feedback(audio_path, fluency_model, llm_client: AsyncClient, postu
     )
     
     response = json.loads(completion.choices[0].message.content)      # type: ignore
+    response['speaking_rate'] = int(audio_features['speaking_rate'] * 60)
     response['overall_score'] = calculate_overall_score(response)
     response['transcript'] = audio_features['transcript']
         
@@ -51,7 +52,7 @@ if __name__ == "__main__":
     client = AsyncClient()
     fluency_model = joblib.load('./fluency/models/weights/xgboost_model.pkl')
 
-    sample_name = "tim-urban"
+    sample_name = "unconfident"
     feedback = asyncio.run(get_feedback(f"./samples/{sample_name}.wav", fluency_model, client, response_schema=Feedback))
     output_file = f"./backend/outputs/{sample_name}.json"
     
