@@ -1,3 +1,4 @@
+import os
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -16,10 +17,14 @@ class BodyLanguageCorrector:
         self.HandLandmarker = mp.tasks.vision.HandLandmarker
         self.HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
         self.VisionRunningMode = mp.tasks.vision.RunningMode
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        pose_path = os.path.join(BASE_DIR, '../mediapipe_models/pose_landmarker.task')
+        face_path = os.path.join(BASE_DIR, '../mediapipe_models/face_landmarker.task')
+        hand_path = os.path.join(BASE_DIR, '../mediapipe_models/hand_landmarker.task')
         
         # Initialize pose detector
         pose_options = self.PoseDetectorOptions(
-            base_options=self.BaseOptions(model_asset_path='mediapipe_models/pose_landmarker.task'),
+            base_options=self.BaseOptions(model_asset_path=pose_path),
             running_mode=self.VisionRunningMode.VIDEO,
             num_poses=1,
             min_pose_detection_confidence=0.5,
@@ -28,17 +33,20 @@ class BodyLanguageCorrector:
         )
         self.pose_detector = self.PoseDetector.create_from_options(pose_options)
         
+
         # Initialize face detector
         face_options = self.FaceDetectorOptions(
-            base_options=self.BaseOptions(model_asset_path='mediapipe_models/face_landmarker.task'),
+            base_options=self.BaseOptions(model_asset_path=face_path),
             running_mode=self.VisionRunningMode.VIDEO,
             # min_suppression_threshold=0.3
         )
         self.face_detector = self.FaceDetector.create_from_options(face_options)
+
         
+       
         # Initialize hand landmarker
         hand_options = self.HandLandmarkerOptions(
-            base_options=self.BaseOptions(model_asset_path='mediapipe_models/hand_landmarker.task'),
+            base_options=self.BaseOptions(model_asset_path=hand_path),
             running_mode=self.VisionRunningMode.VIDEO,
             num_hands=2,
             min_hand_detection_confidence=0.5,
