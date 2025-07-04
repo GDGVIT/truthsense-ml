@@ -84,6 +84,11 @@ class BodyLanguageCorrector:
         self._is_calibrated = False
         self._reference_mean = np.array([0.0, 0.0, -1.0]) # Default, will be updated on first frame
 
+        # Blink Detection Constants
+        self.EAR_THRESHOLD = 0.2  # Threshold for Eye Aspect Ratio to detect a blink
+        self.LEFT_EYE_EAR_POINTS = {"top": 159, "bottom": 145, "left": 33, "right": 133}
+        self.RIGHT_EYE_EAR_POINTS = {"top": 386, "bottom": 374, "left": 362, "right": 263}
+
         # Eye landmark sets for circle-based detection (using FaceLandmarker indices)
         self.LEFT_EYE_CIRCLE_POINTS = {"left_corner": 130, "right_corner": 133, "top": 27, "bottom": 145}
         self.RIGHT_EYE_CIRCLE_POINTS = {"left_corner": 362, "right_corner": 263, "top": 257, "bottom": 374}
@@ -96,7 +101,7 @@ class BodyLanguageCorrector:
 
         # For a 16-inch laptop, the right value for the Radius multiplier is 0.2 and THRESHOLD COSINE is 0.9
         self._RADIUS_MULTIPLIER = 0.2
-        self._THRESHOLD_COSINE = 0.9  # Cosine similarity threshold for gaze direction (adjust as needed)
+        self._THRESHOLD_COSINE = 0.95  # Cosine similarity threshold for gaze direction (adjust as needed)
 
         # Categorized Feedback Counters
         self.feedback_counts: Dict[str, Dict[str, int]] = {
@@ -156,6 +161,25 @@ class BodyLanguageCorrector:
             print(f"Warning: Unknown feedback category '{category}'. Adding it.")
             self.feedback_counts[category] = {subtype: 1}
 
+    def _calculate_eye_aspect_ratio(self, landmarks: List[Any], eye_points: Dict[str, int]) -> float:
+        """Calculates the Eye Aspect Ratio (EAR) for a single eye."""
+        # Get 2D landmark coordinates
+        top_pt = np.array([landmarks[eye_points["top"]].x, landmarks[eye_points["top"]].y])
+        bottom_pt = np.array([landmarks[eye_points["bottom"]].x, landmarks[eye_points["bottom"]].y])
+        left_pt = np.array([landmarks[eye_points["left"]].x, landmarks[eye_points["left"]].y])
+        right_pt = np.array([landmarks[eye_points["right"]].x, landmarks[eye_points["right"]].y])
+
+        # Calculate Euclidean distances
+        vertical_dist = np.linalg.norm(top_pt - bottom_pt).item()
+        horizontal_dist = np.linalg.norm(left_pt - right_pt).item()
+
+        # Avoid division by zero
+        if horizontal_dist == 0:
+            return 0.0
+
+        # Compute and return the EAR
+        ear = vertical_dist / horizontal_dist
+        return ear
 
     def _get_gaze_vector_from_facelandmarks(self, landmarks, w, h):
         """Calculates the average gaze vector from both eyes using FaceLandmarker output."""
@@ -205,7 +229,6 @@ class BodyLanguageCorrector:
         """
         h, w = frame.shape[:2]
         rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_image)
         
         # face_landmarker_result = self.face_landmarker.detect_for_video(mp_image, timestamp)
         face_landmarker_result = self.face_landmarker.process(rgb_image)
@@ -258,6 +281,20 @@ class BodyLanguageCorrector:
                 right_eye_center, right_radius, left_iris_pixel, right_iris_pixel = \
                 self._get_eye_detection_data_from_facelandmarks(landmarks, h, w)
             iris_in_bounds = left_iris_in_bound and right_iris_in_bound
+
+            # Check for blinking
+            left_ear = self._calculate_eye_aspect_ratio(landmarks, self.LEFT_EYE_EAR_POINTS)
+            right_ear = self._calculate_eye_aspect_ratio(landmarks, self.RIGHT_EYE_EAR_POINTS)
+
+            if left_ear < self.EAR_THRESHOLD and right_ear < self.EAR_THRESHOLD:
+                # Both eyes are closed, it's a blink.
+                return {
+                    "looking_at_camera": False, "iris_in_bounds": False,
+                    "gaze_vector_aligned": False, "confidence": 0.0,
+                    "eye_feedback_subtype": "Blinking",
+                    "head_feedback_subtype": "Head centered",  # Assume head pose is okay during a blink
+                    "viz_data": viz_data # Return empty viz_data to prevent drawing
+                }
 
             # Populate viz_data for drawing eye circles and iris points
             viz_data["left_eye_center"] = left_eye_center
@@ -445,10 +482,8 @@ class BodyLanguageCorrector:
             overall_feedback_list.append("No pose detected")
             self._update_feedback_counts("shoulder_alignment", "No pose detected")
             self._update_feedback_counts("head_alignment_body", "No pose detected")
-            # Removed spine_straightness update
             self.current_feedback_status["shoulder_alignment"] = "No pose detected"
             self.current_feedback_status["head_alignment_body"] = "No pose detected"
-            # Removed spine_straightness status update
 
         # Analyze hand gestures if hands detected
         if hand_result.hand_landmarks:
@@ -523,13 +558,16 @@ class BodyLanguageCorrector:
             
             # --- VISUALIZATION CODE ---
             # This section draws all the feedback text and eye contact visuals on the frame
-
-            # 1. Visualize Eye Contact (Circles and Gaze Vector)
             viz_data = feedback_for_frame["viz_data"]
             h, w = frame.shape[:2]
+            is_blinking = feedback_for_frame["eye_contact"]["feedback"] == "Blinking"
 
-            # Draw eye circles and iris points if face detected
-            if viz_data["left_eye_center"] is not None:
+            # Only draw the eye circles and gaze vector if the user is NOT blinking
+            # and the necessary visualization data exists.
+
+            # 1. Visualize Eye Contact (Circles and Gaze Vector)
+
+            if viz_data["left_eye_center"] is not None and not is_blinking:
                 # Left Eye
                 cv2.circle(frame, viz_data["left_eye_center"], int(viz_data["left_radius"]), 
                            (0, 0, 255) if not feedback_for_frame["eye_contact"]["feedback"] == "Eye contact maintained" else (0, 255, 0), 2)
