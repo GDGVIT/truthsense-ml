@@ -37,7 +37,6 @@ class BodyLanguageCorrector:
         print(f"Hand model path: {self.hand_model_path}, exists: {os.path.exists(self.hand_model_path)}")
         print(f"Face model path: {self.face_model_path}, exists: {os.path.exists(self.face_model_path)}")
 
-
         # Initialize pose detector
         pose_options = self.PoseLandmarkerOptions(
             base_options=self.BaseOptions(model_asset_path=self.pose_model_path),
@@ -69,11 +68,11 @@ class BodyLanguageCorrector:
             min_face_presence_confidence=0.5,
             min_tracking_confidence=0.5
         )
-        # self.face_landmarker = self.FaceLandmarker.create_from_options(face_options)
-        self.face_landmarker = mp.solutions.face_mesh.FaceMesh(
-            static_image_mode=False, max_num_faces=1, refine_landmarks=True,
-            min_detection_confidence=0.9, min_tracking_confidence=0.9
-            )
+        self.face_landmarker = self.FaceLandmarker.create_from_options(face_options)
+        # self.face_landmarker = mp.solutions.face_mesh.FaceMesh(
+        #     static_image_mode=False, max_num_faces=1, refine_landmarks=True,
+        #     min_detection_confidence=0.9, min_tracking_confidence=0.9
+        #     )
                 
         # Analysis parameters
         self.analysis_interval = 0.5  # 2 times per second
@@ -90,8 +89,8 @@ class BodyLanguageCorrector:
         self.RIGHT_EYE_EAR_POINTS = {"top": 386, "bottom": 374, "left": 362, "right": 263}
 
         # Eye landmark sets for circle-based detection (using FaceLandmarker indices)
-        self.LEFT_EYE_CIRCLE_POINTS = {"left_corner": 130, "right_corner": 133, "top": 27, "bottom": 145}
-        self.RIGHT_EYE_CIRCLE_POINTS = {"left_corner": 362, "right_corner": 263, "top": 257, "bottom": 374}
+        self.LEFT_EYE_CIRCLE_POINTS = {"left_corner": 130, "right_corner": 133, "top": 223, "bottom": 23}
+        self.RIGHT_EYE_CIRCLE_POINTS = {"left_corner": 362, "right_corner": 359, "top": 443, "bottom": 253}
         self.LEFT_IRIS_CENTER_IDX = 468
         self.RIGHT_IRIS_CENTER_IDX = 473
 
@@ -101,7 +100,7 @@ class BodyLanguageCorrector:
 
         # For a 16-inch laptop, the right value for the Radius multiplier is 0.2 and THRESHOLD COSINE is 0.9
         self._RADIUS_MULTIPLIER = 0.2
-        self._THRESHOLD_COSINE = 0.95  # Cosine similarity threshold for gaze direction (adjust as needed)
+        self._THRESHOLD_COSINE = 0.9  # Cosine similarity threshold for gaze direction (adjust as needed)
 
         # Categorized Feedback Counters
         self.feedback_counts: Dict[str, Dict[str, int]] = {
@@ -229,9 +228,10 @@ class BodyLanguageCorrector:
         """
         h, w = frame.shape[:2]
         rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_image)
         
-        # face_landmarker_result = self.face_landmarker.detect_for_video(mp_image, timestamp)
-        face_landmarker_result = self.face_landmarker.process(rgb_image)
+        face_landmarker_result = self.face_landmarker.detect_for_video(mp_image, timestamp)
+        # face_landmarker_result = self.face_landmarker.process(rgb_image)
 
         iris_in_bounds = False
         gaze_vector_aligned = False
@@ -242,15 +242,16 @@ class BodyLanguageCorrector:
 
         # --- Visualization Data Initialization ---
         # These will be populated if face landmarks are detected
-        viz_data = {
+        viz_data: dict = {
             "left_eye_center": None, "left_radius": None, "left_iris_pixel": None,
             "right_eye_center": None, "right_radius": None, "right_iris_pixel": None,
             "iris_center_combined": None, "gaze_endpoint": None, "gaze_color": None
         }
 
-        # if face_landmarker_result.face_landmarks:
-        if face_landmarker_result.multi_face_landmarks:
-            landmarks = face_landmarker_result.multi_face_landmarks[0].landmark
+        if face_landmarker_result.face_landmarks:
+        # if face_landmarker_result.multi_face_landmarks:
+            landmarks = face_landmarker_result.face_landmarks[0]
+            # landmarks = face_landmarker_result.multi_face_landmarks[0].landmark
 
             current_gaze_vector = self._get_gaze_vector_from_facelandmarks(landmarks, w, h)
 
