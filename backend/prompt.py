@@ -1,12 +1,39 @@
 import json
-from pydantic import BaseModel
+from schema import PostureFeatures, Feedback, FrontendResponse
 
-def get_prompt(audio_features, posture_features = None, schema = BaseModel):
+def format_posture_features(posture_features: dict | PostureFeatures):
+    if isinstance(posture_features, PostureFeatures):
+        posture_features = posture_features.model_dump()
+
+    def format_posture_section(title, section_dict):
+        lines = [f"## {title}"]
+        for k, v in section_dict.items():
+            lines.append(f"- {k}: {v}")
+        return '\n'.join(lines)
+
+    posture_features_text = ''
+    if isinstance(posture_features, dict):
+        if 'eyeContact' in posture_features:
+            posture_features_text += format_posture_section('Eye Contact', posture_features['eyeContact']) + '\n\n'
+        if 'shoulderAlignment' in posture_features:
+            posture_features_text += format_posture_section('Shoulders', posture_features['shoulderAlignment']) + '\n\n'
+        if 'headBodyAlignment' in posture_features:
+            posture_features_text += format_posture_section('Head vs Body Alignment', posture_features['headBodyAlignment']) + '\n\n'
+        if 'handGestures' in posture_features:
+            posture_features_text += format_posture_section('Gestures ', posture_features['handGestures']) + '\n\n'
+    else:
+      raise TypeError("posture_features should be either a PostureFeatures object, or a dictionary")
+
+    return posture_features_text
+
+
+def get_prompt(audio_features, posture_features: dict | PostureFeatures, response_schema = FrontendResponse):
+    posture_features_text = format_posture_features(posture_features)
     prompt = f"""
 You are a professional voice coach and delivery analyst tasked with evaluating the user's performance based on a variety of acoustic and prosodic features. Below is a detailed snapshot of the speaker’s delivery — both baseline and full-clip — along with their changes. Use this to deliver personalized, context-aware feedback.
 
 ## NOTE:
-- The **first {int(audio_features['baseline_duration'])} seconds** of the speech are used to define the speaker's personal baseline.
+- The **first {audio_features['baseline_duration']} seconds** of the speech are used to define the speaker's personal baseline.
 - All relative metrics (e.g., deltas, ratios) are calculated with respect to this baseline.
 - Interpret *changes* from baseline as signs of adaptation or stress — not necessarily flaws.
 - **Avoid quoting any raw values** in your response. Use intuitive, narrative insights only.
@@ -20,7 +47,7 @@ You are a professional voice coach and delivery analyst tasked with evaluating t
 </transcript>
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📏 BASELINE METRICS (First {int(audio_features['baseline_duration'])} seconds)
+📏 BASELINE METRICS (First {audio_features['baseline_duration']} seconds)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## Fluency & Tempo
@@ -90,12 +117,22 @@ You are a professional voice coach and delivery analyst tasked with evaluating t
 - MFCC mean delta: {audio_features['mfcc_mean_delta']:+.2f}
 - Delta MFCC mean delta: {audio_features['delta_mean_delta']:+.6f}
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🧍‍♂️ POSTURE FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The following posture features are provided as input:
+
+{posture_features_text}
+
 🧠 **Interpretation Tips** (for internal use only):
 - A **negative pitch_std_delta** might suggest monotony or nervousness; a positive value implies expressive modulation.
 - **Decreased RMS or HNR** may imply loss of vocal energy or confidence.
 - **Increased jitter/shimmer** may reflect stress or instability.
 - A **low syllable rate ratio** suggests slowing down relative to their natural pace, which may imply hesitation or deliberate pacing.
 - **ZCR changes** may reflect articulation style or clarity.
+
+
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🧭 INSTRUCTIONS FOR FEEDBACK GENERATION
@@ -162,21 +199,38 @@ Your goals:
 
 ---
 
+🎩 **4️⃣ Posture Coach**
+You are a body language and posture specialist who analyzes the speaker’s physical presence during their speech.
+
+What to focus on:
+- **Eye Contact:** Whether the speaker maintains eye contact and keeps their head centered toward the audience.
+- **Head-Body Alignment:** If the head is properly aligned with the body and not tilted or off-center.
+- **Shoulder Alignment:** Whether the shoulders are level, relaxed, and not slouched or uneven.
+- **Hand Gestures + Positioning:** If hands are visible, used naturally for gesturing, and positioned appropriately within the frame.
+
+Your goals:
+- Carefully interpret the provided posture features and the transcript to assess the speaker’s overall posture and nonverbal communication.
+- Output a list of 3-7 specific, actionable pointers for improving posture and body language while speaking (e.g., “Keep both hands visible and use them for natural gestures,” “Maintain steady eye contact with the audience,” “Sit or stand upright with relaxed shoulders”).
+- Assign a **posture_score** (1-100), reflecting the overall effectiveness and professionalism of the speaker’s posture.
+
+---
+
 ✅ **IMPORTANT OUTPUT RULES**
-- Interpret *relative changes from baseline* as signs of adaptation or stress — not necessarily flaws.
+- Do not necessarily interpret *relative changes from baseline* as flaws.
 - Be supportive, specific, and context-aware.
 - Avoid quoting or mentioning any raw numerical feature values.
+- Avoid mentioning baseline changes or the baseline.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📄 OUTPUT FORMAT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Strictly follow this JSON format:
 {{
-  "fluency_coach": {{
+  "fluency_evaluator": {{
     "comment": str,
     "fluency_score": int
   }},
-  "language_coach": {{
+  "language_evaluator": {{
     "strengths": [str],
     "improvements": [str],
     "structure_score": int,
@@ -187,10 +241,14 @@ Strictly follow this JSON format:
     "improvements": [str],
     "clarity_score": int,
     "confidence_score": int
+  }},
+  "posture_evaluator" : {{
+    "tips": [str],
+    "score": int
   }}
 }}
 
 This is the schema you must follow:
-{json.dumps(schema.model_json_schema(), indent=2)}
+{json.dumps(response_schema.model_json_schema(), indent=2)}
 """
     return prompt
