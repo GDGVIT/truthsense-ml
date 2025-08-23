@@ -15,7 +15,7 @@ from typing import Dict, List, Tuple, Any, Optional
 
 class BodyLanguageCorrector:
     def __init__(self):        
-        model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../posenet_models')
+        model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../posenet_models')
         self.pose_model_path = os.path.join(model_dir, 'pose_landmarker.task')
         self.face_model_path = os.path.join(model_dir, 'face_landmarker.task')
         self.hand_model_path = os.path.join(model_dir, 'hand_landmarker.task')
@@ -513,8 +513,19 @@ class BodyLanguageCorrector:
             self.print_final_report()
         if save_location:
             if not save_location.endswith('json'): save_location += ".json"
-            with open(os.path.join(os.path.dirname(os.path.__file__), save_location), "a"):
-                json.dump
+
+            file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), save_location)
+            save_data = {
+                "total frames": self.total_frames,
+                **self.feedback_counts, 
+                'confidence proxied by eye contact': self.eye_contact_confidence['sum'] / self.eye_contact_confidence['count']
+            }
+            if not os.path.exists(file_path):
+                with open(file_path, "x") as file:
+                    json.dump(save_data, fp=file)
+            else:
+                with open(file_path, "w") as file:
+                    json.dump(save_data, fp=file)
             
 
     def print_final_report(self):
@@ -551,4 +562,4 @@ class BodyLanguageCorrector:
 # Usage example
 if __name__ == "__main__":
     corrector = BodyLanguageCorrector()
-    corrector.run_video_analysis(0)
+    corrector.run_video_analysis(0, show_viz=False, save_location="hello.json")
