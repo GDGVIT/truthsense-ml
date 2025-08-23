@@ -9,8 +9,10 @@ os.makedirs("weights", exist_ok=True)
 
 # Load balanced dataset
 # Will need to change path according to where you run the file from
-X = np.load("./fluency/outputs/X.npy")
-y = np.load("./fluency/outputs/y.npy")
+current_dir = os.path.dirname(os.path.abspath(__file__))
+outputs_dir = os.path.join(current_dir, "..", "outputs")
+X = np.load(os.path.join(outputs_dir, "X.npy"))
+y = np.load(os.path.join(outputs_dir, "y.npy"))
 
 # Split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
