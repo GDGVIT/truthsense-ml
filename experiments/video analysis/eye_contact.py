@@ -26,6 +26,11 @@ RIGHT_EYE = {
 LEFT_IRIS_CENTER = 468
 RIGHT_IRIS_CENTER = 473
 
+# Variable for multiplication with radius for dynamic height adjustment
+# This needs to change for different screen sizes
+# For 14-inch laptop, 0.15 works best. For 16-inch, 0.2 works best. For larger size, a greater multiplier must be used
+RADIUS_MULTIPLIER = 0.2
+
 cap = cv2.VideoCapture(0)
 print("Press 'q' to quit")
 
@@ -46,8 +51,7 @@ while cap.isOpened():
             bottom_y = landmarks[points["bottom"]].y * h
             eye_height = bottom_y - top_y
 
-            # Dynamic radius = 10% of vertical eye height
-            radius = eye_height * 0.15
+            radius = eye_height * RADIUS_MULTIPLIER
 
             alpha = 0.65  # weighted center (flexible)
             y = int((1 - alpha) * top_y + alpha * bottom_y)

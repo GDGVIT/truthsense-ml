@@ -23,9 +23,9 @@ class BodyLanguageCorrector:
         # Get the directory of the current script (posture.py)
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         
-        # Go up one level from 'video' to 'truthsense-ml' (your project root)
+        # Go up one level from 'video analysis' to the "experiment"
         project_root_dir = os.path.abspath(os.path.join(BASE_DIR, os.pardir))
-        model_dir = os.path.join(project_root_dir, 'mediapipe_models')
+        model_dir = os.path.join(project_root_dir, '../posenet_models')
 
         self.pose_model_path = os.path.join(model_dir, 'pose_landmarker.task')
         self.face_model_path = os.path.join(model_dir, 'face_landmarker.task')
