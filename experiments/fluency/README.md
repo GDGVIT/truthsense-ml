@@ -17,7 +17,7 @@ All training scripts for these models are located in the `train` folder.
 
 ## Data
 
-You can find the dataset we used [on HuggingFace](https://www.hugggingface.com). (Let us know if you have trouble accessing it!)
+You can find the dataset we used [on HuggingFace](https://github.com/KaminiSabu/ReadingConfidenceDataset/tree/main). (Let us know if you have trouble accessing it!)
 
 ## Preprocessing
 
