@@ -30,3 +30,5 @@ Trained model weights are available in the `weights` folder, on the same dataset
 ## Testing
 
 We tested all our models on both our own speaking samples and the full [Tim Urban TED talk](https://youtu.be/arj7oStGLkU?si=JnqCOG9LV-CtCS--). You can run your own tests using `testing.ipynb` — just update the paths to your `.wav` files.
+
+The testing file assumes for now that the samples are stored under a `samples` folder in the root project directory, change that path in order to test the models on your data.
