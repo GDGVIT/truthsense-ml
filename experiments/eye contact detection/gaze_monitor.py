@@ -41,7 +41,7 @@ def get_gaze_vector(landmarks, w, h):
 cap = cv2.VideoCapture(0)
 print("Press 'q' to quit")
 
-THRESHOLD_COSINE = 0.99  # Adjust if too strict/lenient
+THRESHOLD_COSINE = 0.96  # Adjust if too strict/lenient
 
 while cap.isOpened():
     ret, frame = cap.read()
