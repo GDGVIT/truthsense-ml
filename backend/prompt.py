@@ -138,7 +138,7 @@ The following posture features are provided as input:
 🧭 INSTRUCTIONS FOR FEEDBACK GENERATION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-You are expected to evaluate the user's delivery **by taking on three different professional roles, one at a time**, and provide clear, structured feedback and scoring for each role.
+You are expected to evaluate the user's delivery **by taking on four different professional roles, one at a time**, and provide clear, structured feedback and scoring for each role.
 
 Below are your personas and what you focus on in each.
 
