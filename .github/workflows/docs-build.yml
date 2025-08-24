@@ -1,0 +1,56 @@
+name: Build Docs (MkDocs) → docs-build
+
+on:
+  push:
+    branches: [ test, dev, main ]        # adjust to your workflow
+    paths:
+      - '**/*.md'
+      - 'mkdocs.yml'
+      - 'requirements-docs.txt'
+      - 'docs/**'
+  workflow_dispatch:
+
+# This allows the workflow to push to another branch
+permissions:
+  contents: write
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install MkDocs deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-docs.txt
+
+      - name: Build MkDocs site
+        # If a single warning should NOT fail the build, drop --strict
+        run: mkdocs build --strict --site-dir site
+
+      # Optional: keep an artifact of the site for debugging
+      - name: Upload site artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mkdocs-site
+          path: site
+
+      - name: Publish site/ to docs-build branch (root)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: site
+          publish_branch: docs-build
+          # Creates a fresh history on docs-build so it contains only static files
+          force_orphan: true
