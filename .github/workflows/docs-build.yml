@@ -1,56 +1,54 @@
-name: Build Docs (MkDocs) → docs-build
+# .github/workflows/build-docs.yml
+name: Build Docs (push to docs-build)
 
 on:
   push:
-    branches: [ test, dev, main ]        # adjust to your workflow
-    paths:
-      - '**/*.md'
-      - 'mkdocs.yml'
-      - 'requirements-docs.txt'
-      - 'docs/**'
-  workflow_dispatch:
+    branches: [ main, dev, test ]   # adjust to your active branches
 
-# This allows the workflow to push to another branch
 permissions:
-  contents: write
+  contents: write                   # needed to push to docs-build
 
 jobs:
-  build-docs:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout (full history)
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0            # required to push a branch
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-          cache: 'pip'
+          python-version: '3.10'    # or your version
 
-      - name: Install MkDocs deps
+      - name: Install docs dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements-docs.txt
 
-      - name: Build MkDocs site
-        # If a single warning should NOT fail the build, drop --strict
-        run: mkdocs build --strict --site-dir site
+      - name: Build MkDocs
+        run: |
+          mkdocs build --strict --site-dir site
 
-      # Optional: keep an artifact of the site for debugging
-      - name: Upload site artifact
+      # OPTIONAL: if you don’t want to keep an artifact, delete this entire step
+      - name: Upload build artifact (optional)
         uses: actions/upload-artifact@v4
         with:
           name: mkdocs-site
           path: site
 
-      - name: Publish site/ to docs-build branch (root)
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: site
-          publish_branch: docs-build
-          # Creates a fresh history on docs-build so it contains only static files
-          force_orphan: true
+      - name: Publish site/ to docs-build branch
+        run: |
+          rm -rf /tmp/docs-site
+          mkdir -p /tmp/docs-site
+          cp -r site/* /tmp/docs-site/
+          cd /tmp/docs-site
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b docs-build
+          git add .
+          git commit -m "docs: publish site ($(date -u +'%Y-%m-%dT%H:%M:%SZ'))"
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push --force origin docs-build
