@@ -119,4 +119,6 @@ asyncio.run(main())
 
 ---
 
-For detailed schema definitions, feature keys, and scoring weights, see [API Reference](./api_reference.md).
+For detailed schema definitions, feature keys, and scoring weights, see [API Reference](./api-git add docs/fusion-interface.md
+git commit -m "docs: fix broken link to api-reference.md (strict mode)"
+git pushreference.md).
