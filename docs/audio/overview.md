@@ -50,9 +50,9 @@ flowchart TD
     F --> G
     
     G --> H["ML Models (RF / XGBoost / CNN)"]
-    H --> I["JSON Output (Fluency, Confidence, Pace, Modulation)"]
-    I --> J["Fusion with Video Features"]
-    J --> K["LLM for Final Report"]
+    H --> I["Fusion with Video Features"]
+    I --> J["LLM for Final Report"]
+    J --> K["JSON Output (Fluency, Confidence, Pace, Modulation)"]
 ```
 
 ---

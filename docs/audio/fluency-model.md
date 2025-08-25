@@ -8,7 +8,7 @@ It forms a core part of the audio analysis pipeline, enabling automatic scoring 
 ---
 
 ## Data
-- **Inputs:** Balanced dataset of acoustic/prosodic features (`X.npy`) and fluency labels (`y.npy`).
+- **Inputs:** Balanced dataset of acoustic/prosodic features and fluency labels.
 - **Features used:**
   - Zero Crossing Rate (ZCR)  
   - Pitch statistics (mean, std, variance)  
@@ -16,6 +16,7 @@ It forms a core part of the audio analysis pipeline, enabling automatic scoring 
   - Mel-Frequency Cepstral Coefficients (MFCCs) and ΔMFCC  
   - Jitter, shimmer, and Harmonic-to-Noise Ratio (HNR)  
   - Speaking rate, syllable rate, and pause metrics  
+- **Dataset Used:** We make use of the [Avalinguo Audio Set](https://github.com/agrija9/Avalinguo-Audio-Set) for fluency ratings.
 
 - **Labels:** 3-class fluency scale:
   - `0` → Low  
@@ -25,11 +26,8 @@ It forms a core part of the audio analysis pipeline, enabling automatic scoring 
 ---
 
 ## Model
-The baseline fluency model is implemented as a **Random Forest Classifier**:
-
-- `n_estimators = 200`  
-- `max_depth = 10`  
-- `random_state = 42`  
+The baseline fluency model is implemented as a **Light GBM**:
+  
 
 This model was chosen for its interpretability, strong performance on tabular feature sets, and resilience against overfitting on small to medium-sized datasets.
 
@@ -43,9 +41,9 @@ This model was chosen for its interpretability, strong performance on tabular fe
 
 ## Outputs
 
-- **Predictions:** Stored in `fluency/outputs/fluency_preds.npy`  
-- **True labels:** Stored in `fluency/outputs/y_test.npy`  
-- **Trained model weights:** Saved at `fluency/weights/fluency_model.pkl`  
+- **Predictions:** Stored in `experiements/fluency/outputs/fluency_preds.npy`  
+- **True labels:** Stored in `experiments/fluency/outputs/y_test.npy`  
+- **Trained model weights:** Saved at `fluency/weights/light_gbm.pkl`  
 
 ---
 
@@ -60,3 +58,5 @@ X_sample = np.array([...])  # feature vector
 pred = model.predict([X_sample])
 print(pred)  # -> 0 (Low), 1 (Medium), or 2 (High)
 ```
+
+---

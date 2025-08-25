@@ -17,7 +17,7 @@ It covers transcription, feature extraction, fluency modeling, and response pack
    → See [Transcription](transcription.md)
 
 3. **Baseline Definition**  
-   - The first *N* seconds of audio are isolated.  
+   - The first 5% of audio is isolated.  
    - Baseline metrics (pitch, energy, fluency, syllable rate, etc.) are computed.  
    - All subsequent metrics are interpreted **relative to this baseline**.  
 

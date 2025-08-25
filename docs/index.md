@@ -7,8 +7,7 @@ By analyzing both the **audio** and **video** streams of a recorded response, it
 
 ## Why TruthSense?
 
-- **Interviews are stressful.** Candidates often fail to notice their own nervous habits, filler words, or weak posture.  
-- **Traditional mock interviews are limited.** Human feedback can be subjective, inconsistent, or unavailable on demand.  
+-- **Speaking Skills.** Practice and improve your  
 - **AI assistance provides objectivity.** TruthSense combines signal processing, computer vision, and large language models to provide structured, actionable insights.
 
 ---
