@@ -102,18 +102,18 @@ class BodyLanguageCorrector:
             "hands": {}
         }
     
-    def _calculate_distance(self, a, b):
-        return np.linalg.norm([a.x - b.x, a.y - b.y])
-    
     def _calculate_EAR(self, landmarks: List[Any], points: Dict[str, int]) -> float:
         """Calculate eye aspect ratio to detect blinks"""
+        def calculate_distance(a, b):
+            return np.linalg.norm([a.x - b.x, a.y - b.y])
+
         top = landmarks[points["top"]]
         bottom = landmarks[points["bottom"]]
         left = landmarks[points["left"]]
         right = landmarks[points["right"]]
 
-        vertical_dist = self._calculate_distance(top, bottom) or 0.0
-        horizontal_dist = self._calculate_distance(left, right) or 0.0
+        vertical_dist = calculate_distance(top, bottom) or 0.0
+        horizontal_dist = calculate_distance(left, right) or 0.0
 
         return vertical_dist / horizontal_dist if horizontal_dist != 0 else 0.0     # type: ignore
 
@@ -228,9 +228,6 @@ class BodyLanguageCorrector:
             right_ear = self._calculate_EAR(landmarks, self.RIGHT_EYE_EAR_POINTS)
 
             if left_ear < self.EAR_THRESHOLD and right_ear < self.EAR_THRESHOLD:
-                print("Gotten viz data in if conditional")
-                print("Viz data: ", viz_data)
-
                 # Both eyes are closed, it's a blink.
                 return {
                     "looking_at_camera": False, "iris_in_bounds": False,
@@ -279,8 +276,7 @@ class BodyLanguageCorrector:
             "iris_in_bounds": iris_in_bounds,
             "gaze_vector_aligned": gaze_vector_aligned,
             "confidence": float(confidence),
-            "eye_feedback_subtype": eye_feedback_subtype,
-            "head_feedback_subtype": head_feedback_subtype,
+            "eye_feedback_subtype": eye_feedback_subtype + "; " + head_feedback_subtype,
             "viz_data": viz_data # Always return viz_data, even if empty
         }
 
@@ -377,8 +373,7 @@ class BodyLanguageCorrector:
         
         # Update eye contact confidence tracking
         self.eye_contact_confidence["sum"] += eye_head_result["confidence"]
-        self.eye_contact_confidence["count"] += 1
-        avg_confidence = self.eye_contact_confidence["sum"] / self.eye_contact_confidence["count"]
+        avg_confidence = self.eye_contact_confidence["sum"] / self.total_frames
         
         # Update feedback counts for eye contact
         self.update_feedback("eyeContact", eye_head_result["eye_feedback_subtype"])
@@ -518,7 +513,7 @@ class BodyLanguageCorrector:
             save_data = {
                 "total frames": self.total_frames,
                 **self.feedback_counts, 
-                'confidence proxied by eye contact': self.eye_contact_confidence['sum'] / self.eye_contact_confidence['count']
+                'confidence proxied by eye contact': self.eye_contact_confidence['sum'] / self.total_frames
             }
             if not os.path.exists(file_path):
                 with open(file_path, "x") as file:
@@ -562,4 +557,4 @@ class BodyLanguageCorrector:
 # Usage example
 if __name__ == "__main__":
     corrector = BodyLanguageCorrector()
-    corrector.run_video_analysis(0, show_viz=False, save_location="hello.json")
+    corrector.run_video_analysis(0, show_viz=True, display=False, save_location="hello.json")
