@@ -36,5 +36,5 @@ print("\nClassification Report for Tuned LightGBM:\n")
 print(classification_report(y_test, y_pred))
 
 # After model.fit(...)
-joblib.dump(grid, "weights/lightgbm_model.pkl")
+joblib.dump(grid, "../weights/lightgbm_model.pkl")
 print("Model saved.")

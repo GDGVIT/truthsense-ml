@@ -58,4 +58,4 @@ print(classification_report(y_test, y_pred))
 
 # Save predictions and model
 np.save("./fluency/outputs/stacking_preds.npy", y_pred)
-joblib.dump(stacking_clf, "weights/stacking_model.pkl")
+joblib.dump(stacking_clf, "../weights/stacking_model.pkl")

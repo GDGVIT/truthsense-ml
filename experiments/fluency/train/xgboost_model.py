@@ -51,4 +51,4 @@ np.save("fluency/outputs/xgboost_preds.npy", y_pred)
 np.save("fluency/outputs/y_test.npy", y_test)
 
 # After model.fit(...)
-joblib.dump(model, "weights/xgboost_model.pkl")
+joblib.dump(model, "../weights/xgboost_model.pkl")

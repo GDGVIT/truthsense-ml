@@ -80,4 +80,4 @@ print(classification_report(y_test, y_pred))
 # Save model
 # ================================
 os.makedirs("weights", exist_ok=True)
-joblib.dump(meta_model, "weights/random_forest_model.pkl")
+joblib.dump(meta_model, "../weights/random_forest_model.pkl")

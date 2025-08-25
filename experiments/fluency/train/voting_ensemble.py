@@ -47,4 +47,4 @@ np.save("fluency/outputs/voting_preds.npy", y_pred)
 np.save("fluency/outputs/y_test.npy", y_test)
 
 # After voting_clf.fit(...)
-joblib.dump(ensemble, "weights/voting_model.pkl")
+joblib.dump(ensemble, "../weights/voting_model.pkl")
