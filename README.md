@@ -37,7 +37,7 @@
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/<your-username>/truthsense-ml.git
+git clone https://github.com/<GadiMahi/truthsense-ml.git
 cd truthsense-ml
 ```
 ### 2. Create a virtual environment
@@ -53,27 +53,6 @@ pip install -r requirements.txt
 
 
 <directions to execute>
-
-### 4. Execute
-```bash
-from fusion import get_feedback
-from schema import PostureFeatures
-
-posture = PostureFeatures(
-    eyeContact={"score": 0.8},
-    shoulderAlignment={"score": 0.9},
-    handGestures={"score": 0.7},
-    headBodyAlignment={"score": 0.85},
-)
-
-feedback = await get_feedback(
-    audio_path="sample.wav",
-    fluency_model=my_fluency_model,
-    posture_features=posture
-)
-
-print(feedback)
-```
 
 ## Contributors
 
