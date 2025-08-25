@@ -34,7 +34,7 @@
 ## Running
 
 <directions to install>
-```bash
+```python
 #1. Clone the repository
 
 git clone https://github.com/<your-username>/truthsense-ml.git
