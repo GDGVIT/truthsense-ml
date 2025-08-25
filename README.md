@@ -2,8 +2,8 @@
 <a href="https://dscvit.com">
 	<img width="400" src="https://user-images.githubusercontent.com/56252312/159312411-58410727-3933-4224-b43e-4e9b627838a3.png#gh-light-mode-only" alt="GDSC VIT"/>
 </a>
-	<h2 align="center"> < Insert Project Title Here > </h2>
-	<h4 align="center"> < Insert Project Description Here > <h4>
+	<h2 align="center"> < TruthSense > </h2>
+	<h4 align="center"> < A multimodal AI system for evaluating communication skills using audio, video, and LLM-based feedback. > <h4>
 </p>
 
 ---
@@ -15,24 +15,59 @@
 
 
 ## Features
-- [ ]  < feature >
-- [ ]  < feature >
-- [ ]  < feature >
-- [ ]  < feature >
+- [x] Audio analysis (transcription, speaking rate, pauses, fluency metrics)  
+- [x] Video analysis (eye contact, posture, gesture, alignment)  
+- [x] Fusion layer combining multimodal features  
+- [x] LLM-powered structured feedback (via Groq API)  
+- [x] Validated output schema for frontend integration 
 
 <br>
 
 ## Dependencies
- - < dependency >
- - < dependency >
+- Python 3.9–3.10  
+- [Groq API](https://groq.com/) SDK (requires `GROQ_API_KEY`)  
+- Core libraries: `librosa`, `parselmouth`, `pydub`, `soundfile`, `nltk`, `numpy`, `pydantic`, `joblib`, `groq`, `mediapipe`, `opencv-python`
+
+---
 
 
 ## Running
 
-
-< directions to install > 
+### 1. Clone the repository
 ```bash
-< insert code >
+git clone https://github.com/<your-username>/truthsense-ml.git
+cd truthsense-ml
+```
+### 2. Create a virtual environment
+```bash
+python3 -m venv .venv
+source .venv/bin/activate   # macOS/Linux
+.venv\Scripts\activate      # Windows
+```
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Directions to execute
+```bash
+from fusion import get_feedback
+from schema import PostureFeatures
+
+posture = PostureFeatures(
+    eyeContact={"score": 0.8},
+    shoulderAlignment={"score": 0.9},
+    handGestures={"score": 0.7},
+    headBodyAlignment={"score": 0.85},
+)
+
+feedback = await get_feedback(
+    audio_path="sample.wav",
+    fluency_model=my_fluency_model,
+    posture_features=posture
+)
+
+print(feedback)
 ```
 
 < directions to execute >
