@@ -51,7 +51,9 @@ source .venv/bin/activate   # macOS/Linux
 pip install -r requirements.txt
 ```
 
-### 4. Directions to execute
+
+<directions to execute>
+
 ```bash
 from fusion import get_feedback
 from schema import PostureFeatures
@@ -70,12 +72,6 @@ feedback = await get_feedback(
 )
 
 print(feedback)
-```
-
-< directions to execute >
-
-```bash
-< insert code >
 ```
 
 ## Contributors
