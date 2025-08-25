@@ -54,6 +54,7 @@ pip install -r requirements.txt
 
 <directions to execute>
 
+### 4. Execute
 ```bash
 from fusion import get_feedback
 from schema import PostureFeatures
