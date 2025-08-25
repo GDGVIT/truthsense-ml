@@ -33,23 +33,25 @@
 
 ## Running
 
-### 1. Clone the repository
+<directions to install>
 ```bash
+#1. Clone the repository
+
 git clone https://github.com/<your-username>/truthsense-ml.git
 cd truthsense-ml
-```
-### 2. Create a virtual environment
-```bash
+
+#2. Create a virtual environment
+
 python3 -m venv .venv
 source .venv/bin/activate   # macOS/Linux
 .venv\Scripts\activate      # Windows
-```
-### 3. Install dependencies
-```bash
+
+#3. Install dependencies
+
 pip install -r requirements.txt
 ```
 
-### 4. Directions to execute
+<Directions to execute>
 ```bash
 from fusion import get_feedback
 from schema import PostureFeatures
@@ -70,11 +72,7 @@ feedback = await get_feedback(
 print(feedback)
 ```
 
-< directions to execute >
 
-```bash
-< insert code >
-```
 
 ## Contributors
 
