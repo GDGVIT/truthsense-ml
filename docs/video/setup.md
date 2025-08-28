@@ -7,7 +7,7 @@ This guide explains how to install dependencies, prepare model files, and run th
 ## 1. Environment Setup
 
 ### Python Version
-- Python **3.9+** is recommended (tested on 3.10).
+- Python **3.9-3.11** is recommended (tested on 3.10).
 
 ### Required Libraries
 Install dependencies using `pip`:
@@ -63,7 +63,7 @@ Edit the call at the bottom of posture.py:
 ```python
 if __name__ == "__main__":
     corrector = BodyLanguageCorrector()
-    corrector.run_video_analysis("path/to/video.mp4", show_viz=True, save_location="outputs/session.json")
+    corrector.run_video_analysis(0, show_viz=True, save_location="outputs/session.json")
 ```
 ---
 ## 5. Key Options

@@ -23,7 +23,7 @@ This document explains the main classes used in the `video/` pipeline for body l
 
 ---
 
-## `EyeContactAnalyzer`
+## `Eye Contact and Head Pose Analysis`
 
 ### Purpose
 - Detects gaze alignment and blinking using face/iris landmarks.
@@ -36,50 +36,30 @@ This document explains the main classes used in the `video/` pipeline for body l
 - `RADIUS_MULTIPLIER`: used for iris circle size.
 
 ### Key Methods
-- **`analyze(face_landmarks)`** → returns per-frame eye-contact confidence, blink events, and gaze vector status.
+- **`eye_and_head_analysis`** → returns per-frame eye-contact confidence, blink events, and gaze vector status.
 
 ---
 
-## `PostureAnalyzer`
+## `Posture Analysis`
 
 ### Purpose
 - Tracks upper-body posture using pose landmarks.
-- Focuses on **head tilt** and **shoulder alignment**.
+- Focuses on **head** and **shoulder** analysis.
 
 ### Key Methods
-- **`analyze(pose_landmarks)`** → returns posture classification (centered, tilted, slouched).
-- **`compute_angle(head, shoulders)`** → helper for tilt estimation.
+- **`posture_analysis(pose_landmarks)`** → returns posture classification (centered, tilted, slouched).
 
 ---
 
-## `GestureAnalyzer`
+## `Hand Placement and Detection Analyzer`
 
 ### Purpose
 - Detects hand positions and movements.
 - Categorizes gestures into **low / mid / high** relative to body.
 
 ### Key Methods
-- **`analyze(hand_landmarks)`** → returns presence and class of gesture for each frame.
-- **`track_frequency()`** → counts gesture occurrences over session.
+- **`gesture_analysis(hand_landmarks)`** → returns presence and class of gesture for each frame.
 
 ---
-
-## `ReportAggregator`
-
-### Purpose
-- Maintains counters and accumulates results from all analyzers.
-- Consolidates session into final JSON output.
-
-### Key Methods
-- **`update(frame_results)`** → merge per-frame results into counters.
-- **`to_json(filepath)`** → save session report in JSON format.
-
----
-
-# Summary
-The pipeline follows a **modular class structure**:
-- `BodyLanguageCorrector` orchestrates flow.
-- `EyeContactAnalyzer`, `PostureAnalyzer`, and `GestureAnalyzer` handle domain-specific tasks.
-- `ReportAggregator` merges outputs into reports.
 
 This design ensures flexibility: each analyzer can be tuned or replaced independently without breaking the full pipeline.

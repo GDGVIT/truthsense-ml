@@ -60,6 +60,8 @@ The helper function `_get_gaze_vector_from_facelandmarks(...)` uses **iris cente
 - **Left iris center**: `468`  
 - **Right iris center**: `473`  
 
+The landmark indices have been extracted from [MediaPipe Face Landmarker documentation](https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker).  
+Please refer to the official docs to understand how and why the indices were chosen.
 It builds eye-wise vectors (**corner → iris**), averages them, and normalizes:
 
 ```python
@@ -138,15 +140,6 @@ A new `run_video_analysis(...)` call resets calibration automatically:
 self._is_calibrated = False
 self._reference_mean = np.array([0.0, 0.0, -1.0])
 ```
-If you need to **force a re-calibration mid-run** (e.g., the user moved seats), you can manually toggle:
-
-```python
-# Manual re-calibration (do this between frames)
-corrector._is_calibrated = False
-# Next valid face frame will set a new _reference_mean
-```
-(This is a simple internal flag flip; there’s no separate public method in the current code.)
-
 ---
 ## Confidence Computation (after calibration)
 

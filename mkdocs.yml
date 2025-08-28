@@ -51,7 +51,6 @@ nav:
       - Transcription: audio/transcription.md
       - Feature Engineering: audio/feature-engineering.md
       - Fluency Model: audio/fluency-model.md
-      - Output Schema: audio/output-schema.md
       - CLI: audio/cli.md
 
   - Video:
@@ -70,3 +69,4 @@ nav:
   - LLM Integration: llm-integration.md
   - Frontend Interface: frontend-interface.md
   - API Reference: api-reference.md
+  - Schema: output-schema.md

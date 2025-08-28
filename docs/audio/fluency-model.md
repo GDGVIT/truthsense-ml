@@ -52,7 +52,7 @@ This model was chosen for its interpretability, strong performance on tabular fe
 ### Load Model
 ```python
 import joblib
-model = joblib.load("fluency/weights/fluency_model.pkl")
+model = joblib.load("experiments/fluency/weights/fluency_model.pkl")
 import numpy as np
 X_sample = np.array([...])  # feature vector
 pred = model.predict([X_sample])
