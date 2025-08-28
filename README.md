@@ -57,9 +57,6 @@ pip install -r requirements.txt
 ## Contributors
 
 <table>
-	## Contributors
-
-<table>
 	<tr align="center">
 		<td>
 			Mahi Gadi
@@ -90,7 +87,6 @@ pip install -r requirements.txt
 			</p>
 		</td>
 	</tr>
-</table>
 </table>
 
 <p align="center">
