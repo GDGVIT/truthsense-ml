@@ -62,6 +62,8 @@ prompt
 ──▶ post-process (WPM / overall_score / transcript)
 ──▶ JSON string
 ```
+### Note:
+Posture analysis has been implemented in-client, and so the backend folder doesn't include that.
 
 ---
 
