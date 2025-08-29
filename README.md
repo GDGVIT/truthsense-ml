@@ -98,7 +98,7 @@ This is the easiest and most reliable way to get the server running.
 					<img src="http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" width="36" height="36" alt="GitHub"/>
 				</a>
 				<a href="https://www.linkedin.com/in/mahigadi">
-					<img src="http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36" alt="LinkedIn"/>
+					<img src="public/images/my_image.jpg" width="36" height="36" alt="LinkedIn"/>
 				</a>
 			</p>
 		</td>
