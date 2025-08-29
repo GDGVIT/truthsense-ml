@@ -61,7 +61,7 @@ pip install -r requirements.txt
 		<td>
 			Mahi Gadi
 			<p align="center">
-				<img src="/public/images/my_image.jpg" width="150" height="150" alt="Your Name Here (Insert Your Image Link In Src)">
+				<img src="/public/images/my_image.jpg" width="150" height="120" alt="Your Name Here (Insert Your Image Link In Src)">
 			</p>
 			<p align="center">
 				<a href="https://github.com/GadiMahi">
