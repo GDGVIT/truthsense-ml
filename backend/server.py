@@ -95,14 +95,20 @@ class JobStatus(BaseModel):
     error: Optional[str] = None
 
 
+@app.get("/")
+async def root_msg():
+    return {"message": "Welcome to the AI service of TruthSense"}
+
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
     return {
         "status": "healthy",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now().isoformat(),
         "model_loaded": fluency_model is not None
     }
+
 
 @app.post("/analyze", response_model=AnalysisResponse)
 async def analyze_recording(
@@ -167,6 +173,7 @@ async def analyze_recording(
         logger.error(f"Error starting analysis for {recording_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+
 @app.get("/status/{recording_id}")
 async def get_job_status(recording_id: str):
     """Get the status of a processing job"""
@@ -188,6 +195,7 @@ async def get_job_status(recording_id: str):
         response["error"] = job.error
     
     return response
+
 
 async def process_analysis(
     recording_id: str,
@@ -277,6 +285,7 @@ async def process_analysis(
             except Exception as e:
                 logger.warning(f"Failed to clean up temp file {temp_audio_path}: {e}")
 
+
 @app.delete("/jobs/{recording_id}")
 async def cleanup_job(recording_id: str):
     """Clean up a completed or failed job"""
@@ -285,6 +294,7 @@ async def cleanup_job(recording_id: str):
         return {"message": "Job cleaned up successfully"}
     else:
         raise HTTPException(status_code=404, detail="Job not found")
+
 
 @app.get("/jobs")
 async def list_jobs():
@@ -299,6 +309,7 @@ async def list_jobs():
             for job_id, job in processing_jobs.items()
         }
     }
+
 
 if __name__ == "__main__":
     import uvicorn
