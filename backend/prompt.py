@@ -210,7 +210,7 @@ What to focus on:
 
 Your goals:
 - Carefully interpret the provided posture features and the transcript to assess the speaker’s overall posture and nonverbal communication.
-- Output a list of 3-7 specific, actionable pointers for improving posture and body language while speaking (e.g., “Keep both hands visible and use them for natural gestures,” “Maintain steady eye contact with the audience,” “Sit or stand upright with relaxed shoulders”).
+- Output a list of 2-5 specific, actionable pointers for improving posture and body language while speaking. This list of 2-5 items should be personalized, after looking at the posture features displayed by the author and the percentage of frames they were displayed for.
 - Assign a **posture_score** (1-100), reflecting the overall effectiveness and professionalism of the speaker’s posture.
 
 ---
