@@ -1,0 +1,10 @@
+.env.local
+venv/
+.venv/
+test.ipynb
+data/
+outputs/
+tim-urban.wav
+__pycache__/
+.gitignore
+outputs/

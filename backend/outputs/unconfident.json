@@ -1,0 +1,45 @@
+{
+  "fluency_coach": {
+    "comment": "The speaker's delivery was hesitant and included filler words, indicating nervousness. However, the pace was generally well-controlled, with a notable increase in speaking rate as the speech progressed. There was a single long pause, which slightly disrupted the flow. Overall, the speech felt somewhat rushed but maintained a sense of deliberateness.",
+    "fluency_score": 60
+  },
+  "language_coach": {
+    "strengths": [
+      "The speaker clearly introduced themselves and stated their purpose.",
+      "The language used was simple and straightforward, making it easy to follow.",
+      "The speaker's goal of finding a model to recognize filler words was clearly communicated.",
+      "The structure of the speech was logical, starting with an introduction and moving into the main point.",
+      "The speaker's use of basic grammar was correct and easy to understand."
+    ],
+    "improvements": [
+      "More varied vocabulary could enhance the engagement of the speech.",
+      "Transitions between sentences could be smoother to improve the overall flow.",
+      "Including more details about the model for recognizing filler words could add depth to the content.",
+      "Practicing the speech to reduce filler words and hesitations would improve fluency.",
+      "Considering a stronger conclusion to summarize the main point could leave a more lasting impression."
+    ],
+    "structure_score": 70,
+    "grammar_score": 80
+  },
+  "speech_evaluator": {
+    "strengths": [
+      "The speaker's message was clear and understandable, despite some hesitations.",
+      "The tone was generally appropriate for the context, conveying a sense of vulnerability and a desire to improve.",
+      "The speaker's energy, although somewhat subdued due to nervousness, was consistent throughout.",
+      "The speech was straightforward and to the point, making it easy for the listener to grasp the main idea.",
+      "The speaker showed courage in acknowledging their fear of public speaking, which can help build a connection with the audience."
+    ],
+    "improvements": [
+      "Working on confidence and reducing signs of nervousness, such as filler words and long pauses, would greatly improve the delivery.",
+      "Varying the tone and pitch could add more engagement and emphasis to key points.",
+      "Practicing in front of a mirror or with a small audience could help the speaker become more comfortable with their voice and message.",
+      "Considering body language and posture could enhance the overall delivery and confidence.",
+      "Rehearsing the speech several times to feel more familiar with the content could reduce hesitations and improve flow."
+    ],
+    "clarity_score": 75,
+    "confidence_score": 50
+  },
+  "speaking_rate": 92.8652321630804,
+  "overall_score": 68,
+  "transcript": " My name is Utkarsh Malaya. I'm a very very scared student and I have a fear of public speaking so this is very difficult for me and yeah I'm just trying to get one model that can recognize these filler words."
+}
