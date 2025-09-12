@@ -123,16 +123,6 @@ def extract_parselmouth_features(data, sr):
     }
 
 
-async def async_extract_parselmouth_features(data, sr, executor):
-    """
-    !! Warning: Usability untested
-    A function to asynchronously extract features using Parselmouth
-    """
-    return await asyncio.get_event_loop().run_in_executor(
-        executor, extract_parselmouth_features, data, sr
-    )
-
-
 # Extract features using Librosa
 def extract_librosa_features(data, sr):
     """Helper function to extract ZCR, RMS Energy, and MFCC and Delta-MFCC means using Librosa
@@ -164,16 +154,6 @@ def extract_librosa_features(data, sr):
         "mfcc_mean": mfcc_mean,
         "delta_mean": delta_mean
     }
-
-
-async def async_extract_librosa_features(data, sr, executor):
-    """
-    !! Warning: Usability untested
-    A function to asynchronously extract features using Parselmouth
-    """
-    return await asyncio.get_event_loop().run_in_executor(
-        executor, extract_librosa_features, data, sr
-    )
 
 
 # Helper functions for calculating syllables speaking rate
@@ -216,21 +196,6 @@ def extract_features_from_wave(data, sr):
         **extract_parselmouth_features(data, sr)
     }
  
-    
-async def async_extract_features_from_wave(data, sr, executor):
-    """
-    !! Warning: Usability untested
-    An asynchronous function to extract the features of a wave using librosa and parselmouth
-    """
-    # Start both tasks concurrently
-    librosa_task = asyncio.create_task(async_extract_librosa_features(data, sr, executor))
-    parselmouth_task = asyncio.create_task(async_extract_parselmouth_features(data, sr, executor))
-
-    # Wait for both
-    librosa_feats, parselmouth_feats = await asyncio.gather(librosa_task, parselmouth_task)
-
-    return {**librosa_feats, **parselmouth_feats}
-
 
 # Full function to extract all the features of the audio file
 async def extract_features(audio_data, fluency_model, client: AsyncClient):
