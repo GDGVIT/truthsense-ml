@@ -1,0 +1,8 @@
+.github/
+.hooks/
+samples/
+.gitignore
+CODE_OF_CONDUCT.md
+contributing.md
+LICENSE
+.venv/

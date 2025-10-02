@@ -2,8 +2,8 @@
 <a href="https://dscvit.com">
 	<img width="400" src="https://user-images.githubusercontent.com/56252312/159312411-58410727-3933-4224-b43e-4e9b627838a3.png#gh-light-mode-only" alt="GDSC VIT"/>
 </a>
-	<h2 align="center"> < Insert Project Title Here > </h2>
-	<h4 align="center"> < Insert Project Description Here > <h4>
+	<h2 align="center"> TruthSense </h2>
+	<h4 align="center"> A multimodal AI system for evaluating communication skills using audio, video, and LLM-based feedback. <h4>
 </p>
 
 ---
@@ -15,47 +15,74 @@
 
 
 ## Features
-- [ ]  < feature >
-- [ ]  < feature >
-- [ ]  < feature >
-- [ ]  < feature >
+- [x] Audio analysis (transcription, speaking rate, pauses, fluency metrics)  
+- [x] Video analysis (eye contact, posture, gesture, alignment)  
+- [x] Fusion layer combining multimodal features  
+- [x] LLM-powered structured feedback (via Groq API)  
+- [x] Validated output schema for frontend integration 
 
 <br>
 
 ## Dependencies
- - < dependency >
- - < dependency >
+- Python 3.9–3.10  
+- [Groq API](https://groq.com/) SDK (requires `GROQ_API_KEY`)  
+- Core libraries: `librosa`, `parselmouth`, `pydub`, `soundfile`, `nltk`, `numpy`, `pydantic`, `joblib`, `groq`, `mediapipe`, `opencv-python`
+
+---
 
 
 ## Running
 
+<directions to install>
 
-< directions to install > 
+### 1. Clone the repository
 ```bash
-< insert code >
+git clone https://github.com/<GadiMahi/truthsense-ml.git
+cd truthsense-ml
+```
+### 2. Create a virtual environment
+```bash
+python3 -m venv .venv
+source .venv/bin/activate   # macOS/Linux
+.venv\Scripts\activate      # Windows
+```
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
 ```
 
-< directions to execute >
 
-```bash
-< insert code >
-```
+<directions to execute>
 
 ## Contributors
 
 <table>
 	<tr align="center">
 		<td>
-		John Doe
-		<p align="center">
-			<img src = "https://dscvit.com/images/dsc-logo-square.svg" width="150" height="150" alt="Your Name Here (Insert Your Image Link In Src">
-		</p>
+			Mahi Gadi
 			<p align="center">
-				<a href = "https://github.com/person1">
-					<img src = "http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" width="36" height = "36" alt="GitHub"/>
+				<img src="/public/images/mahi.jpg" width="110" height="150" alt="Your Name Here (Insert Your Image Link In Src)">
+			</p>
+			<p align="center">
+				<a href="https://github.com/GadiMahi">
+					<img src="http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" width="36" height="36" alt="GitHub"/>
 				</a>
-				<a href = "https://www.linkedin.com/in/person1">
-					<img src = "http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36" alt="LinkedIn"/>
+				<a href="https://www.linkedin.com/in/mahigadi">
+					<img src="http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36" alt="LinkedIn"/>
+				</a>
+			</p>
+		</td>
+		<td>
+			Utkarsh Malaiya
+			<p align="center">
+				<img src="https://dscvit.com/images/dsc-logo-square.svg" width="150" height="150" alt="Your Name Here (Insert Your Image Link In Src)">
+			</p>
+			<p align="center">
+				<a href="https://github.com/utkrshm">
+					<img src="http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" width="36" height="36" alt="GitHub"/>
+				</a>
+				<a href="https://www.linkedin.com/in/utkarsh-malaiya">
+					<img src="http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36" alt="LinkedIn"/>
 				</a>
 			</p>
 		</td>
