@@ -17,11 +17,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends\
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy only the requirements file to leverage Docker cache
-COPY requirements.txt .
+# use .env
+COPY .env .
 
-# Install dependencies - this layer is cached and only runs if requirements.txt changes
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy only the requirements file to leverage Docker cache
+COPY requirements.txt
+
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install -r requirements.txt
 
 # Copy the rest of the application code
 COPY . .
@@ -32,7 +35,5 @@ EXPOSE 8003
 # Making working directory backend directory
 WORKDIR /app/backend
 
-# Environment variables will be loaded from .env.docker by uvicorn
-# This command points to the app within the backend directory and loads environment variables from the .env.docker file.
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8003", "--env-file", "../.env.docker"]
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8003"]
 

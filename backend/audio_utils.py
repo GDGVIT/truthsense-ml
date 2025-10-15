@@ -6,6 +6,7 @@ import librosa
 import numpy as np
 import parselmouth
 import soundfile as sf
+import xgboost as xgb
 from groq import AsyncClient
 from pydub import AudioSegment
 from nltk.corpus import cmudict
@@ -241,7 +242,61 @@ async def extract_features(audio_data, fluency_model, client: AsyncClient):
     baseline_fluency_features = np.array([baseline_feats[key] for key in baseline_feats if key in features])
     full_fluency_features = np.array([full_feats[key] for key in full_feats if key in features])
 
-    res = fluency_model.predict(np.vstack((baseline_fluency_features, full_fluency_features)))
+    def _ensure_xgb_compat(obj):
+        try:
+            if hasattr(obj, 'best_estimator_'):
+                _ensure_xgb_compat(obj.best_estimator_)
+            # Pipeline objects have named_steps
+            if hasattr(obj, 'named_steps'):
+                for step in obj.named_steps.values():
+                    _ensure_xgb_compat(step)
+            # Direct XGBClassifier
+            # Ensure the XGBoost estimator classes define expected attributes at class level
+            for clsname in ('XGBClassifier', 'XGBRegressor', 'XGBModel'):
+                cls = getattr(xgb, clsname, None)
+                if cls is not None:
+                    # older pickles may expect these attributes
+                    try:
+                        if not hasattr(cls, 'use_label_encoder'):
+                            setattr(cls, 'use_label_encoder', False)
+                    except Exception:
+                        pass
+                    try:
+                        if not hasattr(cls, 'gpu_id'):
+                            setattr(cls, 'gpu_id', None)
+                    except Exception:
+                        pass
+                    try:
+                        # default to cpu predictor if predictor missing
+                        if not hasattr(cls, 'predictor'):
+                            setattr(cls, 'predictor', 'cpu_predictor')
+                    except Exception:
+                        pass
+            # Also set on the instance if possible
+            if obj.__class__.__name__ in ('XGBClassifier', 'XGBRegressor', 'XGBModel'):
+                try:
+                    setattr(obj, 'use_label_encoder', False)
+                except Exception:
+                    pass
+                try:
+                    setattr(obj, 'gpu_id', None)
+                except Exception:
+                    pass
+                try:
+                    setattr(obj, 'predictor', 'cpu_predictor')
+                except Exception:
+                    pass
+        except Exception:
+            # Be tolerant - if anything goes wrong here, we'll try to call predict and surface errors
+            pass
+
+    _ensure_xgb_compat(fluency_model)
+
+    try:
+        res = fluency_model.predict(np.vstack((baseline_fluency_features, full_fluency_features)))
+    except AttributeError as e:
+        _ensure_xgb_compat(fluency_model)
+        res = fluency_model.predict(np.vstack((baseline_fluency_features, full_fluency_features)))
     baseline_fluency = rating_map[res[0].argmax()]
     full_fluency = rating_map[res[1].argmax()]
 

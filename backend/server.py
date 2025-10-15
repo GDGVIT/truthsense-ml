@@ -28,7 +28,6 @@ from dotenv import load_dotenv
 
 # Load environment variables
 # First try .env.local, then .env
-load_dotenv('.env.local')
 load_dotenv('.env', override=False)
 
 # Configure logging
@@ -235,6 +234,11 @@ async def process_analysis(
             temp_file.write(wav_content)
             temp_file.flush()
             temp_audio_path = temp_file.name
+
+        # Also create an in-memory BytesIO buffer and pass that to the analysis pipeline to avoid
+        # transient file-not-found errors when transcription uses the path.
+        audio_buffer = io.BytesIO(wav_content)
+        audio_buffer.seek(0)
         
         # Update job status
         processing_jobs[recording_id].message = "Starting AI analysis..."
@@ -249,8 +253,9 @@ async def process_analysis(
         logger.info(f"Starting analysis for recording {recording_id}")
         
         # Call main analysis function with progress tracking
+        # Pass the in-memory buffer to the analysis function (it accepts path or BytesIO)
         analysis_result = await get_feedback(
-            temp_audio_path,
+            audio_buffer,
             fluency_model,
             posture_data,
             FrontendResponse

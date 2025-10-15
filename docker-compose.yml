@@ -2,6 +2,9 @@ services:
   truthsense-ai:
     # Tells Compose to build the image from the Dockerfile in the current directory
     build: .
+    # add env file .env
+    env_file:
+      - .env
     # Maps port 8003 on  local machine to port 8003 in the container
     ports:
       - "8003:8003"
